@@ -45,11 +45,10 @@
 ### 📌 获取秘钥
 - 在服务（例如 GitHub）中点击启用 2FA。
 - 系统会生成一个绑定二维码，二维码内容形如：
-otpauth://totp/GitHub:YourName?secret=YOURSECRET&issuer=GitHub
 
-yaml
-复制
-编辑
+  ```swift
+  otpauth://totp/GitHub:YourName?secret=YOURSECRET&issuer=GitHub
+  ```
 - 使用 App 或任何支持 otpauth 的 Authenticator 扫描二维码，将 secret 保存到本地。
 
 ### ✅ 绑定确认
@@ -62,12 +61,14 @@ yaml
 
 ### 🔑 验证码生成原理
 - 使用 **当前时间戳**与**秘钥**进行 HMAC 计算：
-TOTP = HASH(SecretKey, floor(unixtime(now) / 30))
-
-
-- `unixtime(now)`：当前 Unix 时间戳。
-- `30`：时间间隔，表示验证码每 30 秒更新一次。
-- 动态截断 HMAC 结果，取模 10⁶ 得到 6 位验证码。
+  
+   ```swift
+  TOTP = HASH(SecretKey, floor(unixtime(now) / 30))
+   
+    - `unixtime(now)`：当前 Unix 时间戳。
+    - `30`：时间间隔，表示验证码每 30 秒更新一次。
+    - 动态截断 HMAC 结果，取模 10⁶ 得到 6 位验证码。
+  ```
 
 ### ⏱ 为什么需要时间间隔
 - 若不将时间分段，验证码每秒变化一次，会导致客户端和服务器生成的验证码永远无法匹配。
